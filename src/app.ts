@@ -4,6 +4,7 @@ import cors from "cors";
 import cookieParser from "cookie-parser";
 import config from "./config";
 import { userRouter } from "./modules/user/user.route";
+import { globalErrorHandler } from "./middlewares/globalErrorHandler";
 
 const app: Application = express();
 
@@ -17,6 +18,7 @@ app.use(
   }),
 );
 app.use("/api/user", userRouter);
+app.use(globalErrorHandler);
 
 app.get("/", async (req: Request, res: Response) => {
   res.status(200).json({ message: "hello world", success: true });

@@ -2,13 +2,9 @@ import bcrypt from "bcryptjs";
 
 import config from "../../config";
 import { prisma } from "../../lib/prisma";
+import { RegisterInterface } from "./user.interface";
 
-const userCreate = async (payload: {
-  name: string;
-  email: string;
-  password: string;
-  profilePhoto: string;
-}) => {
+const userCreate = async (payload: RegisterInterface) => {
   const { name, email, password, profilePhoto } = payload;
 
   // Check email already exists
@@ -34,16 +30,21 @@ const userCreate = async (payload: {
       name,
       email,
       password: hashPassword,
+      profile: {
+        create: {
+          profilePhoto,
+        },
+      },
     },
   });
 
   // Create profile
-  await prisma.profile.create({
-    data: {
-      userId: createUser.id,
-      profilePhoto,
-    },
-  });
+  // await prisma.profile.create({
+  //   data: {
+  //     userId: createUser.id,
+  //     profilePhoto,
+  //   },
+  // });
 
   // Get user with profile
   const user = await prisma.user.findUnique({
@@ -61,6 +62,12 @@ const userCreate = async (payload: {
   return user;
 };
 
+const userAllFind = async () => {
+  const user = await prisma.user.findMany();
+  return user;
+};
+
 export const userService = {
   userCreate,
+  userAllFind,
 };

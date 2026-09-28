@@ -1,19 +1,35 @@
 import HttpStatus from "http-status";
-import { Request, Response } from "express";
-
+import { NextFunction, Request, Response } from "express";
 import { userService } from "./user.service";
+import { catchAsync } from "../../utils/catchAsync";
+import { sendResponse } from "../../utils/sendResponse";
 
-const createUser = async (req: Request, res: Response) => {
-  const user = await userService.userCreate(req.body);
+const createUser = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const payload = req.body;
+    const user = await userService.userCreate(payload);
+    sendResponse(res, {
+      success: true,
+      statusCode: HttpStatus.CREATED,
+      message: "User created successfully",
+      data: { user },
+    });
+  },
+);
 
-  res.status(HttpStatus.CREATED).json({
-    success: true,
-    statusCode: HttpStatus.CREATED,
-    message: "User created successfully",
-    data: user,
-  });
-};
+const userFind = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const user = await userService.userAllFind();
+    sendResponse(res, {
+      success: true,
+      statusCode: HttpStatus.OK,
+      message: "Users retrieved successfully",
+      data: user,
+    });
+  },
+);
 
 export const userController = {
   createUser,
+  userFind,
 };
