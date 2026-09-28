@@ -5,6 +5,7 @@ import cookieParser from "cookie-parser";
 import config from "./config";
 import { userRouter } from "./modules/user/user.route";
 import { globalErrorHandler } from "./middlewares/globalErrorHandler";
+import { authRoute } from "./modules/auth/auth.routes";
 
 const app: Application = express();
 
@@ -18,6 +19,7 @@ app.use(
   }),
 );
 app.use("/api/user", userRouter);
+app.use("/api/auth", authRoute);
 app.use(globalErrorHandler);
 
 app.get("/", async (req: Request, res: Response) => {
