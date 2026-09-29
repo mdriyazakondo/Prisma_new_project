@@ -28,8 +28,21 @@ const userFind = catchAsync(
     });
   },
 );
+const getMyProfile = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const verifyResult = await userService.getMyProfileDB(
+      req.user?.id as string,
+    );
+    res.status(200).json({
+      success: true,
+      message: "Profile retrieved successfully",
+      data: verifyResult,
+    });
+  },
+);
 
 export const userController = {
   createUser,
   userFind,
+  getMyProfile,
 };

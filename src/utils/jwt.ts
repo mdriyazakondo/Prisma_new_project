@@ -1,5 +1,7 @@
 import jwt, { JwtPayload, SignOptions } from "jsonwebtoken";
 
+type TJwtPayload = JwtPayload & { id: string };
+
 const createToken = (
   payload: JwtPayload,
   secret: string,
@@ -9,4 +11,20 @@ const createToken = (
   return token;
 };
 
-export const jwtUtils = { createToken };
+const verifyToken = (token: string, secret: string) => {
+  try {
+    const verifyToken = jwt.verify(token, secret);
+
+    return {
+      success: true,
+      verifyToken,
+    };
+  } catch (error: any) {
+    return {
+      success: false,
+      error: error.message,
+    };
+  }
+};
+
+export const jwtUtils = { createToken, verifyToken };

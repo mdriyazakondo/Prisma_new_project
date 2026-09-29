@@ -9,9 +9,11 @@ export const globalErrorHandler: ErrorRequestHandler = (
 ) => {
   console.error(err);
 
-  res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({
+  const statusCode = err.statusCode ?? HttpStatus.INTERNAL_SERVER_ERROR;
+
+  res.status(statusCode).json({
     success: false,
-    statusCode: HttpStatus.INTERNAL_SERVER_ERROR,
+    statusCode,
     message: err.message || "Something went wrong",
     error: err,
   });
