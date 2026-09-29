@@ -32,4 +32,29 @@ const loginUser = catchAsync(
   },
 );
 
-export const authController = { loginUser };
+const refreshTokenController = catchAsync(
+  async (req: Request, res: Response) => {
+    const refreshToken = req.cookies.refreshToken;
+
+    if (!refreshToken) {
+      throw new Error("Refresh token not found");
+    }
+
+    const { accessToken } = await authService.refreshTokenService(refreshToken);
+
+    res.cookie("accessToken", accessToken, {
+      httpOnly: true,
+      secure: false,
+      sameSite: "none",
+      maxAge: 1000 * 60 * 60 * 24,
+    });
+
+    sendResponse(res, {
+      success: true,
+      statusCode: HttpStatus.OK,
+      message: "Token refreshed successfully",
+      data: { accessToken },
+    });
+  },
+);
+export const authController = { loginUser, refreshTokenController };
