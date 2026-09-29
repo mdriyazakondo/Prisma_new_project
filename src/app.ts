@@ -6,6 +6,8 @@ import config from "./config";
 import { userRouter } from "./modules/user/user.route";
 import { globalErrorHandler } from "./middlewares/globalErrorHandler";
 import { authRoute } from "./modules/auth/auth.routes";
+import { postRouter } from "./modules/post/post.route";
+import { commentRouter } from "./modules/comment/comment.route";
 
 const app: Application = express();
 
@@ -18,8 +20,12 @@ app.use(
     credentials: true,
   }),
 );
+
 app.use("/api/user", userRouter);
 app.use("/api/auth", authRoute);
+app.use("/api/posts", postRouter);
+app.use("/api/comments", commentRouter);
+
 app.use(globalErrorHandler);
 
 app.get("/", async (req: Request, res: Response) => {
