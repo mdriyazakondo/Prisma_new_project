@@ -6,13 +6,14 @@ export const catchAsync = (fn: RequestHandler) => {
     try {
       await fn(req, res, next);
     } catch (error) {
-      res.status(HttpStatus.BAD_REQUEST).json({
-        success: false,
-        statusCode: HttpStatus.INTERNAL_SERVER_ERROR,
-        message:
-          error instanceof Error ? error.message : "Something went wrong",
-        error: (error as Error).message,
-      });
+      // res.status(HttpStatus.BAD_REQUEST).json({
+      //   success: false,
+      //   statusCode: HttpStatus.INTERNAL_SERVER_ERROR,
+      //   message:
+      //     error instanceof Error ? error.message : "Something went wrong",
+      //   error: (error as Error).message,
+      // });
+      next(error);
     }
   };
 };

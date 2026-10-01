@@ -1,4 +1,4 @@
-import type { Application, Request, Response } from "express";
+import type { Application, NextFunction, Request, Response } from "express";
 import express from "express";
 import cors from "cors";
 import cookieParser from "cookie-parser";
@@ -8,7 +8,8 @@ import { globalErrorHandler } from "./middlewares/globalErrorHandler";
 import { authRoute } from "./modules/auth/auth.routes";
 import { postRoutes } from "./modules/post/post.route";
 import { commentRoutes } from "./modules/comment/comment.route";
-
+import { notFoundMiddleware } from "./middlewares/notFound";
+import HttpStatus from "http-status";
 const app: Application = express();
 
 app.use(express.json());
@@ -21,15 +22,18 @@ app.use(
   }),
 );
 
+app.get("/", async (req: Request, res: Response) => {
+  res.status(200).json({ message: "hello world", success: true });
+});
+
 app.use("/api/user", userRouter);
 app.use("/api/auth", authRoute);
 app.use("/api/posts", postRoutes);
 app.use("/api/comments", commentRoutes);
 
-app.use(globalErrorHandler);
+// app.use(globalErrorHandler);
+app.use(notFoundMiddleware);
 
-app.get("/", async (req: Request, res: Response) => {
-  res.status(200).json({ message: "hello world", success: true });
-});
+app.use(globalErrorHandler);
 
 export default app;

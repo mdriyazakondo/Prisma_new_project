@@ -1,20 +1,16 @@
-import { ErrorRequestHandler } from "express";
+import { ErrorRequestHandler, NextFunction, Request, Response } from "express";
 import HttpStatus from "http-status";
 
 export const globalErrorHandler: ErrorRequestHandler = (
-  err,
-  req,
-  res,
-  next,
+  err: any,
+  req: Request,
+  res: Response,
+  next: NextFunction,
 ) => {
-  console.error(err);
-
-  const statusCode = err.statusCode ?? HttpStatus.INTERNAL_SERVER_ERROR;
-
-  res.status(statusCode).json({
+  res.status(HttpStatus.BAD_REQUEST).json({
     success: false,
-    statusCode,
-    message: err.message || "Something went wrong",
-    error: err,
+    statusCode: HttpStatus.INTERNAL_SERVER_ERROR,
+    message: err.message,
+    error: err.stack,
   });
 };
