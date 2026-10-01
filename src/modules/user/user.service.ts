@@ -14,9 +14,9 @@ const userCreate = async (payload: RegisterInterface) => {
     },
   });
 
-  if (emailExist) {
-    throw new Error("User with this email already exists");
-  }
+  // if (emailExist) {
+  //   throw new Error("User with this email already exists");
+  // }
 
   // Hash password
   const hashPassword = await bcrypt.hash(
