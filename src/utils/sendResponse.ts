@@ -10,4 +10,4 @@ export const sendResponse = <T>(res: Response, data: TResponse<T>) => {
     meta: data.meta,
   });
 };
-0
+0;

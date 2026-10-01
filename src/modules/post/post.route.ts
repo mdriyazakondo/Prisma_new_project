@@ -20,6 +20,7 @@ router.get(
   auth(Role.USER, Role.ADMIN, Role.AUTHOR),
   postController.getMyPosts,
 );
+router.get("/viewed-posts", postController.getViewedPosts);
 
 router.get("/:postId", postController.getPostById);
 

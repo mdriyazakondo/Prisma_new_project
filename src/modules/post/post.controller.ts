@@ -20,7 +20,9 @@ const createPost = catchAsync(
 
 const getAllPosts = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
-    const result = await postService.allGetPost();
+    const query = req.query;
+
+    const result = await postService.allGetPost(query);
 
     sendResponse(res, {
       success: true,
@@ -66,7 +68,15 @@ const getMyPosts = catchAsync(
 );
 
 const getPostsStats = catchAsync(
-  async (req: Request, res: Response, next: NextFunction) => {},
+  async (req: Request, res: Response, next: NextFunction) => {
+    const result = await postService.statsPost();
+    sendResponse(res, {
+      success: true,
+      statusCode: HttpStatus.OK,
+      message: "Stats Post Retrieved successfuly",
+      data: result,
+    });
+  },
 );
 
 const updatePost = catchAsync(
@@ -108,6 +118,18 @@ const deletePost = catchAsync(
   },
 );
 
+const getViewedPosts = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const result = await postService.getViewedPosts();
+
+    res.status(200).json({
+      success: true,
+      message: "Viewed posts retrieved successfully",
+      data: result,
+    });
+  },
+);
+
 export const postController = {
   createPost,
   getPostsStats,
@@ -116,4 +138,5 @@ export const postController = {
   getAllPosts,
   updatePost,
   deletePost,
+  getViewedPosts,
 };

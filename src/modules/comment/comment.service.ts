@@ -1,16 +1,71 @@
-const createComment = async () => {};
+import { prisma } from "../../lib/prisma";
+import {
+  ICreateCommentPayload,
+  IModerateCommentPayload,
+  IUpdateCommentPayload,
+} from "./comment.interface";
 
-const getCommentByAuthorId = async () => {};
+const createComment = async (
+  authorId: string,
+  payload: ICreateCommentPayload,
+) => {
+  await prisma.post.findUniqueOrThrow({
+    where: {
+      id: payload.postId,
+    },
+  });
 
-const getCommentByCommentId = async () => {};
+  const comment = await prisma.comment.create({
+    data: {
+      ...payload,
+      authorId,
+    },
+    // include:{
+    //     post : true
+    // }
+  });
 
-const updateComment = async () => {};
+  return comment;
+};
 
-const deleteComment = async () => {};
+const getCommentByAuthorId = async (authorId: string) => {
+  const comments = await prisma.comment.findMany({
+    where: {
+      authorId,
+    },
+    orderBy: { createAt: "desc" },
+    include: {
+      post: {
+        select: {
+          id: true,
+          title: true,
+        },
+      },
+    },
+  });
+  return comments;
+};
 
-const moderateComment = async () => {};
+const getCommentByCommentId = async (commentId: string) => {
+  const result = await prisma.comment.findUnique({
+    where: {
+      id: commentId,
+    },
+  });
 
-export const CommentService = {
+  return result;
+};
+
+const updateComment = async (
+  commentId: string,
+  data: IUpdateCommentPayload,
+  authorId: string,
+) => {};
+
+const deleteComment = async (commentId: string, authorId: string) => {};
+
+const moderateComment = async (id: string, data: IModerateCommentPayload) => {};
+export const commentService = {
   createComment,
   getCommentByAuthorId,
   getCommentByCommentId,

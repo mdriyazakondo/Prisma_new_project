@@ -6,8 +6,8 @@ model Comment {
   postId   String
   post     Post          @relation(fields: [postId], references: [id], onDelete: Cascade)
   status   commentStatus @default(APPROVED)
-  createAt DateTime      @default(now())
-  updateAt DateTime      @updatedAt
+  createdAt DateTime      @default(now())
+  updatedAt DateTime      @updatedAt
 
   @@index([postId])
   @@index([authorId])
