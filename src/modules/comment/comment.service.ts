@@ -33,7 +33,7 @@ const getCommentByAuthorId = async (authorId: string) => {
     where: {
       authorId,
     },
-    orderBy: { createAt: "desc" },
+    orderBy: { createdAt: "desc" },
     include: {
       post: {
         select: {

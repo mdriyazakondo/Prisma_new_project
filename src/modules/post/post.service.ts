@@ -27,7 +27,6 @@ const allGetPost = async (query: IPostQuery) => {
   const tags = query.tags ? JSON.parse(query.tags as string) : null;
   const tagsArray = Array.isArray(tags) ? tags : [];
 
-
   const andConditions: PostWhereInput[] = [];
 
   if (query.searchTrem) {
@@ -358,7 +357,7 @@ const getPostById = async (postId: string) => {
             status: commentStatus.APPROVED,
           },
           orderBy: {
-            createAt: "desc",
+            createdAt: "desc",
           },
         },
         _count: {
