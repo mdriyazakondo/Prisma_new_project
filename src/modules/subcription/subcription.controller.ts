@@ -19,6 +19,8 @@ const stripeWebhookHandler = catchAsync(
     let event = req.body as Buffer;
     let signature = req.headers["stripe-signature"] as string;
 
+    console.log("signature", signature);
+
     await subcriptionService.stripeWebhookHandler(event, signature);
 
     sendResponse(res, {
@@ -29,7 +31,23 @@ const stripeWebhookHandler = catchAsync(
   },
 );
 
+const subscripitonStatus = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const userId = req.user?.id as string;
+
+    const result = await subcriptionService.getSubscription(userId);
+
+    sendResponse(res, {
+      success: true,
+      statusCode: httpStatus.OK,
+      message: "Subscription status retrived successfully",
+      data: result,
+    });
+  },
+);
+
 export const subcriptionController = {
   createCheckoutSession,
   stripeWebhookHandler,
+  subscripitonStatus,
 };

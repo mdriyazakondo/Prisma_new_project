@@ -12,6 +12,7 @@ import { notFoundMiddleware } from "./middlewares/notFound";
 import HttpStatus from "http-status";
 import { subcriptionRoute } from "./modules/subcription/subcription.route";
 import { stripe } from "./utils/stripe";
+import { premiumRoute } from "./modules/premium/premium.route";
 const app: Application = express();
 
 const endpointSecret = config.stripe_webhook_secret;
@@ -88,7 +89,8 @@ app.use("/api/user", userRouter);
 app.use("/api/auth", authRoute);
 app.use("/api/posts", postRoutes);
 app.use("/api/comments", commentRoutes);
-app.use("/api/subcription", subcriptionRoute);
+app.use("/api/subscription", subcriptionRoute);
+app.use("/api/premium", premiumRoute);
 
 // app.use(globalErrorHandler);
 app.use(notFoundMiddleware);

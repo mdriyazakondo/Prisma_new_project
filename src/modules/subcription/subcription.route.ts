@@ -12,4 +12,10 @@ router.post(
 );
 
 router.post("/webhook", subcriptionController.stripeWebhookHandler);
+
+router.get(
+  "/status",
+  auth(Role.ADMIN, Role.AUTHOR, Role.USER),
+  subcriptionController.subscripitonStatus,
+);
 export const subcriptionRoute = router;
